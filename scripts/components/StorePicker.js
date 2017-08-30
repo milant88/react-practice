@@ -1,38 +1,35 @@
 /*
  StorePicker
- <StorePicker/>
+ This will let us make <StorePicker/>
  */
 
 import React from 'react';
-import { Navigation } from 'react-router';
-var ReactRouter = require('react-router');
+import { History } from 'react-router';
 import h from '../helpers';
-var History = ReactRouter.History;
+import reactMixin from 'react-mixin';
+import autobind from 'autobind-decorator';
 
-var StorePicker = React.createClass({
+@autobind
+class StorePicker extends React.Component {
 
-    mixins : [History],
-
-    goToStore : function(event) {
+    goToStore(event) {
         event.preventDefault();
-        //get the data from input
+        // get the data from the input
         var storeId = this.refs.storeId.value;
         this.history.pushState(null, '/store/' + storeId);
-        // transition from <StorePicker/> to <App/>
-    },
+    }
 
-    render : function() {
-
-        var name = 'wes';
-
+    render() {
         return (
             <form className="store-selector" onSubmit={this.goToStore}>
-                <h2>Please Enter A Store {name}</h2>
-                <input type="text" ref="storeId" defaultValue={h.getFunName()} required/>
+                <h2>Please Enter A Store</h2>
+                <input type="text" ref="storeId" defaultValue={h.getFunName()} required />
                 <input type="Submit" />
             </form>
-        );
+        )
     }
-});
+}
+
+reactMixin.onClass(StorePicker, History);
 
 export default StorePicker;
