@@ -1,9 +1,11 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var CSSTransitionGroup = require('react-addons-css-transition-group');
+
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
-var Navigation = ReactRouter.Navigation;
+var Navigation = ReactRouter.Navigation; //mixin
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 var History = ReactRouter.History;
 
@@ -206,7 +208,10 @@ var Header = React.createClass({
                <h3 className="tagline"><span>{this.props.tagline}</span></h3>
            </header>
        );
-   }
+   },
+    propTypes : {
+       tagline : React.PropTypes.string.isRequired
+    }
 });
 
 /*
@@ -249,15 +254,29 @@ var Order = React.createClass({
         return (
             <div className="order-wrap">
                 <h2 className="order-title">Your Order</h2>
-                <ul className="order">
+
+                <CSSTransitionGroup
+                    className="order"
+                    component="ul"
+                    transitionName="order"
+                    transitionEnterTimeout={500}
+                    transitionLeaveTimeout={500}
+                >
                     {orderIds.map(this.renderOrder)}
                     <li className="total">
                         <strong>Total:</strong>
                         {h.formatPrice(total)}
                     </li>
-                </ul>
+                </CSSTransitionGroup>
+
             </div>
         )
+    },
+
+    propTypes : {
+        fishes : React.PropTypes.object.isRequired,
+        order : React.PropTypes.object.isRequired,
+        removeFromOrder : React.PropTypes.func.isRequired
     }
 })
 
@@ -297,6 +316,14 @@ var Inventory = React.createClass({
                 <button onClick={this.props.loadSamples}>Load Sample Fishes</button>
             </div>
         );
+    },
+
+    propTypes : {
+        addFish : React.PropTypes.func.isRequired,
+        loadSamples : React.PropTypes.func.isRequired,
+        fishes : React.PropTypes.object.isRequired,
+        linkState : React.PropTypes.func.isRequired,
+        removeFish : React.PropTypes.func.isRequired
     }
 });
 
